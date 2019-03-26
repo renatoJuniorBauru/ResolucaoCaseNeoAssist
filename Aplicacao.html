@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <title>API NeoAssist</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="estilo.css">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+
+    <div class="container">
+        <h2>Tickets</h2>
+        <div class="dropdown">
+            <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Ordene por
+  <span class="caret"></span></button>
+            <ul class="dropdown-menu">
+                <li><a href="#" onclick="orderByDataCreate()">DataCreate</a></li>
+                <li><a href="#" onclick="orderByDataUpdate()">DataUpdate</a></li>
+                <li><a href="#" onclick="orderByPrioridade()"> Prioridade</a></li>
+
+            </ul>
+        </div>
+        <br> Filtar por:
+        <div class="dropdown">
+            <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Prioridade <span class="caret"></span></button>
+            <ul class="dropdown-menu">
+                <li><a href="#" onclick="filtrarPrioridadeAlta()">Alta</a></li>
+                <li><a href="#" onclick="filtrarPrioridadeNormal()">Normal</a></li>
+
+            </ul>
+        </div>
+        <br> Data de criação:
+        <br>
+        <input type="date" id="date1">
+        <br>
+        <input type="date" id="date2">
+        <br>
+        <input type="button" value="FIltrar" onclick="filtrarData()">
+        <div id="dados">
+
+        </div>
+        <ul class="pagination" id="paginas">
+
+        </ul>
+
+       
+    </div>
+
+    <script>
+        var aux = null;
+        var data = null;
+        $.getJSON("tickets.json", function(json) {
+            //console.log(json); // this will show the info it in firebug console
+            data = json;
+            aux = data;
+            // var comp = json;
+            var numPag = data.length / 5;
+            for (var i = 1; i <= numPag; i++) {
+                document.getElementById("paginas").innerHTML += "<li id='pag" + i + "'><a href='#' onclick='proximaPagina(" + i + ")' >" + i + "</a></li>"
+
+            }
+
+            for (var i = 0 in aux) {
+
+                document.getElementById("dados").innerHTML += "<br><b>TicketId: </b>" + aux[i].TicketID + "<br><b>Nome do Cliente: </b>" + aux[i].CustomerName + "<br><b>Data de criação: </b>" + aux[i].DateCreate + "<br><b>Data de Update: </b>" + aux[i].DateUpdate + "<br><b>Prioridade: </b>" + aux[i].Prioridade + "<br> <b>Interações: </b><br>";
+                for (var j = 0 in aux[i].Interactions) {
+                    document.getElementById("dados").innerHTML += "<div class='interacao'><b>Assunto:</b> " + aux[i].Interactions[j].Subject + "<br><b>Mensagem:</b> " + aux[i].Interactions[j].Message + "<br><b>Data de Criação: </b>" + aux[i].Interactions[j].DateCreate + "<br><b>Sender:</b> " + aux[i].Interactions[j].Sender + "<br></div>";
+                }
+                document.getElementById("dados").innerHTML += "<br>";
+
+            }
+
+
+        });
+
+        function orderByDataCreate() {
+            document.getElementById("dados").innerHTML = "";
+            aux = data;
+            aux.sort(function(a, b) {
+                    a = new Date(a.DateCreate);
+                    b = new Date(b.DateCreate);
+                    return b > a ? -1 : b < a ? 1 : 0; });
+    
+            for (var i = 0 in aux) {
+
+                
+              
+                document.getElementById("dados").innerHTML += "<br><b>TicketId: </b>" + aux[i].TicketID + "<br><b>Nome do Cliente: </b>" + aux[i].CustomerName + "<br><b>Data de criação: </b>" + aux[i].DateCreate + "<br><b>Data de Update: </b>" + aux[i].DateUpdate + "<br><b>Prioridade: </b>" + aux[i].Prioridade + "<br> <b>Interações: </b><br>";
+                for (var j = 0 in aux[i].Interactions) {
+                    document.getElementById("dados").innerHTML += "<div class='interacao'><b>Assunto:</b> " + aux[i].Interactions[j].Subject + "<br><b>Mensagem:</b> " + aux[i].Interactions[j].Message + "<br><b>Data de Criação: </b>" + aux[i].Interactions[j].DateCreate + "<br><b>Sender:</b> " + aux[i].Interactions[j].Sender + "<br></div>";
+                }
+                document.getElementById("dados").innerHTML += "<br>";
+            }
+        }
+
+        function orderByDataUpdate() {
+            document.getElementById("dados").innerHTML = "";
+                        aux = data;
+            
+                      aux.sort(function(a, b) {
+                    a = new Date(a.DateUpdate);
+                    b = new Date(b.DateUpdate);
+                    return b > a ? -1 : b < a ? 1 : 0;
+                });
+                        aux = listItems(aux, 1, 5); 
+
+            for (var i = 0 in aux) {
+
+          
+
+                document.getElementById("dados").innerHTML += "<br><b>TicketId: </b>" + aux[i].TicketID + "<br><b>Nome do Cliente: </b>" + aux[i].CustomerName + "<br><b>Data de criação: </b>" + aux[i].DateCreate + "<br><b>Data de Update: </b>" + aux[i].DateUpdate + "<br><b>Prioridade: </b>" + aux[i].Prioridade + "<br> <b>Interações: </b><br>";
+                for (var j = 0 in aux[i].Interactions) {
+                    document.getElementById("dados").innerHTML += "<div class='interacao'><b>Assunto:</b> " + aux[i].Interactions[j].Subject + "<br><b>Mensagem:</b> " + aux[i].Interactions[j].Message + "<br><b>Data de Criação: </b>" + aux[i].Interactions[j].DateCreate + "<br><b>Sender:</b> " + aux[i].Interactions[j].Sender + "<br></div>";
+                }
+                document.getElementById("dados").innerHTML += "<br>";
+
+            }
+        }
+
+        function orderByPrioridade() {
+            document.getElementById("dados").innerHTML = "";
+            aux = data;
+            aux.sort(function(a, b) {
+                    return ((a.Prioridade > b.Prioridade) ? 1 : -1)
+                });
+                        aux = listItems(aux, 1, 5); 
+
+            for (var i = 0 in aux) {
+
+                
+                // console.log(aux);
+                document.getElementById("dados").innerHTML += "<br><b>TicketId: </b>" + aux[i].TicketID + "<br><b>Nome do Cliente: </b>" + aux[i].CustomerName + "<br><b>Data de criação: </b>" + aux[i].DateCreate + "<br><b>Data de Update: </b>" + aux[i].DateUpdate + "<br><b>Prioridade: </b>" + aux[i].Prioridade + "<br> <b>Interações: </b><br>";
+                for (var j = 0 in aux[i].Interactions) {
+                    document.getElementById("dados").innerHTML += "<div class='interacao'><b>Assunto:</b> " + aux[i].Interactions[j].Subject + "<br><b>Mensagem:</b> " + aux[i].Interactions[j].Message + "<br><b>Data de Criação: </b>" + aux[i].Interactions[j].DateCreate + "<br><b>Sender:</b> " + aux[i].Interactions[j].Sender + "<br></div>";
+                }
+                document.getElementById("dados").innerHTML += "<br>";
+              
+            }
+        }
+
+        function filtrarPrioridadeAlta() {
+            document.getElementById("dados").innerHTML = "";
+
+            for (var i = 0 in aux) {
+                if (aux[i].Prioridade == 'Alta') {
+                    document.getElementById("dados").innerHTML += "<br><b>TicketId: </b>" + aux[i].TicketID + "<br><b>Nome do Cliente: </b>" + aux[i].CustomerName + "<br><b>Data de criação: </b>" + aux[i].DateCreate + "<br><b>Data de Update: </b>" + aux[i].DateUpdate + "<br><b>Prioridade: </b>" + aux[i].Prioridade + "<br> <b>Interações: </b><br>";
+                    for (var j = 0 in aux[i].Interactions) {
+                        document.getElementById("dados").innerHTML += "<div class='interacao'><b>Assunto:</b> " + aux[i].Interactions[j].Subject + "<br><b>Mensagem:</b> " + aux[i].Interactions[j].Message + "<br><b>Data de Criação: </b>" + aux[i].Interactions[j].DateCreate + "<br><b>Sender:</b> " + aux[i].Interactions[j].Sender + "<br></div>";
+                    }
+                    document.getElementById("dados").innerHTML += "<br>";
+
+                }
+            }
+            }
+
+        
+
+        function filtrarPrioridadeNormal() {
+            document.getElementById("dados").innerHTML = "";
+
+            for (var i = 0 in aux) {
+                if (aux[i].Prioridade == 'Normal') {
+                    document.getElementById("dados").innerHTML += "<br><b>TicketId: </b>" + aux[i].TicketID + "<br><b>Nome do Cliente: </b>" + aux[i].CustomerName + "<br><b>Data de criação: </b>" + aux[i].DateCreate + "<br><b>Data de Update: </b>" + aux[i].DateUpdate + "<br><b>Prioridade: </b>" + aux[i].Prioridade + "<br> <b>Interações: </b><br>";
+                    for (var j = 0 in aux[i].Interactions) {
+                        document.getElementById("dados").innerHTML += "<div class='interacao'><b>Assunto:</b> " + aux[i].Interactions[j].Subject + "<br><b>Mensagem:</b> " + aux[i].Interactions[j].Message + "<br><b>Data de Criação: </b>" + aux[i].Interactions[j].DateCreate + "<br><b>Sender:</b> " + aux[i].Interactions[j].Sender + "<br></div>";
+                    }
+                    document.getElementById("dados").innerHTML += "<br>";
+
+
+                }
+            }
+
+        }
+
+        function formatDate(date) {
+            var d = new Date(date),
+                month = '' + (d.getMonth() + 1),
+                day = '' + d.getDate(),
+                year = d.getFullYear();
+
+            if (month.length < 2) month = '0' + month;
+            if (day.length < 2) day = '0' + day;
+
+            return [year, month, day].join('-');
+        }
+
+        function filtrarData() {
+            alert("Entra");
+            document.getElementById("dados").innerHTML = "";
+            var date1 = formatDate(new Date(document.getElementById("date1").value));
+            var date2 = formatDate(new Date(document.getElementById("date2").value));
+
+            $.each(aux, function(idx, obj) {
+                var data3 = formatDate(new Date(obj.DateCreate));
+                var a = (data3 > date1 && data3 < date2);
+                //  alert(a);
+                //alert(data3 + " " + date1 + " " + data3 + "" + date2 )
+                if (a) {
+                    //console.log(data3 > date1 && data3 < date2)
+                    document.getElementById("dados").innerHTML += "<br><b>TicketId: </b>" + aux[i].TicketID + "<br><b>Nome do Cliente: </b>" + aux[i].CustomerName + "<br><b>Data de criação: </b>" + aux[i].DateCreate + "<br><b>Data de Update: </b>" + aux[i].DateUpdate + "<br><b>Prioridade: </b>" + aux[i].Prioridade + "<br> <b>Interações: </b><br>";
+                    for (var j = 0 in aux[i].Interactions) {
+                        document.getElementById("dados").innerHTML += "<div class='interacao'><b>Assunto:</b> " + aux[i].Interactions[j].Subject + "<br><b>Mensagem:</b> " + aux[i].Interactions[j].Message + "<br><b>Data de Criação: </b>" + aux[i].Interactions[j].DateCreate + "<br><b>Sender:</b> " + aux[i].Interactions[j].Sender + "<br></div>";
+                    }
+                    document.getElementById("dados").innerHTML += "<br>";
+
+                }
+            });
+
+
+        }
+
+        function listItems(items, pageActual, limitItems) {
+            let result = [];
+            let totalPage = Math.ceil(items.length / limitItems);
+            let count = (pageActual * limitItems) - limitItems;
+            let delimiter = count + limitItems;
+
+            if (pageActual <= totalPage) {
+                for (let i = count; i < delimiter; i++) {
+                    if (items[i] != null) {
+                        result.push(items[i]);
+                    }
+                    count++;
+                }
+            }
+
+            return result;
+        };
+
+        function proximaPagina(i) {
+            document.getElementById("dados").innerHTML = "";
+            aux = listItems(data, i, 5);
+            for (var i = 0 in aux) {
+
+                document.getElementById("dados").innerHTML += "<br><b>TicketId: </b>" + aux[i].TicketID + "<br><b>Nome do Cliente: </b>" + aux[i].CustomerName + "<br><b>Data de criação: </b>" + aux[i].DateCreate + "<br><b>Data de Update: </b>" + aux[i].DateUpdate + "<br><b>Prioridade: </b>" + aux[i].Prioridade + "<br> <b>Interações: </b><br>";
+                for (var j = 0 in aux[i].Interactions) {
+                    document.getElementById("dados").innerHTML += "<div class='interacao'><b>Assunto:</b> " + aux[i].Interactions[j].Subject + "<br><b>Mensagem:</b> " + aux[i].Interactions[j].Message + "<br><b>Data de Criação: </b>" + aux[i].Interactions[j].DateCreate + "<br><b>Sender:</b> " + aux[i].Interactions[j].Sender + "<br></div>";
+                }
+                document.getElementById("dados").innerHTML += "<br>";
+
+            }
+        }
+    </script>
+
+</body>
+
+</html>
