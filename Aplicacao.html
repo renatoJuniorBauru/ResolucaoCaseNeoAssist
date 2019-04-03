@@ -49,7 +49,7 @@
 
         </ul>
 
-       
+
     </div>
 
     <script>
@@ -58,9 +58,10 @@
         $.getJSON("tickets.json", function(json) {
             //console.log(json); // this will show the info it in firebug console
             data = json;
-            aux = data;
             // var comp = json;
             var numPag = data.length / 5;
+            aux = listItems(data, 1, numPag);
+
             for (var i = 1; i <= numPag; i++) {
                 document.getElementById("paginas").innerHTML += "<li id='pag" + i + "'><a href='#' onclick='proximaPagina(" + i + ")' >" + i + "</a></li>"
 
@@ -83,14 +84,15 @@
             document.getElementById("dados").innerHTML = "";
             aux = data;
             aux.sort(function(a, b) {
-                    a = new Date(a.DateCreate);
-                    b = new Date(b.DateCreate);
-                    return b > a ? -1 : b < a ? 1 : 0; });
-    
+                a = new Date(a.DateCreate);
+                b = new Date(b.DateCreate);
+                return b > a ? -1 : b < a ? 1 : 0;
+            });
+
             for (var i = 0 in aux) {
 
-                
-              
+
+
                 document.getElementById("dados").innerHTML += "<br><b>TicketId: </b>" + aux[i].TicketID + "<br><b>Nome do Cliente: </b>" + aux[i].CustomerName + "<br><b>Data de criação: </b>" + aux[i].DateCreate + "<br><b>Data de Update: </b>" + aux[i].DateUpdate + "<br><b>Prioridade: </b>" + aux[i].Prioridade + "<br> <b>Interações: </b><br>";
                 for (var j = 0 in aux[i].Interactions) {
                     document.getElementById("dados").innerHTML += "<div class='interacao'><b>Assunto:</b> " + aux[i].Interactions[j].Subject + "<br><b>Mensagem:</b> " + aux[i].Interactions[j].Message + "<br><b>Data de Criação: </b>" + aux[i].Interactions[j].DateCreate + "<br><b>Sender:</b> " + aux[i].Interactions[j].Sender + "<br></div>";
@@ -101,18 +103,18 @@
 
         function orderByDataUpdate() {
             document.getElementById("dados").innerHTML = "";
-                        aux = data;
-            
-                      aux.sort(function(a, b) {
-                    a = new Date(a.DateUpdate);
-                    b = new Date(b.DateUpdate);
-                    return b > a ? -1 : b < a ? 1 : 0;
-                });
-                        aux = listItems(aux, 1, 5); 
+            aux = data;
+
+            aux.sort(function(a, b) {
+                a = new Date(a.DateUpdate);
+                b = new Date(b.DateUpdate);
+                return b > a ? -1 : b < a ? 1 : 0;
+            });
+            aux = listItems(aux, 1, 5);
 
             for (var i = 0 in aux) {
 
-          
+
 
                 document.getElementById("dados").innerHTML += "<br><b>TicketId: </b>" + aux[i].TicketID + "<br><b>Nome do Cliente: </b>" + aux[i].CustomerName + "<br><b>Data de criação: </b>" + aux[i].DateCreate + "<br><b>Data de Update: </b>" + aux[i].DateUpdate + "<br><b>Prioridade: </b>" + aux[i].Prioridade + "<br> <b>Interações: </b><br>";
                 for (var j = 0 in aux[i].Interactions) {
@@ -127,20 +129,20 @@
             document.getElementById("dados").innerHTML = "";
             aux = data;
             aux.sort(function(a, b) {
-                    return ((a.Prioridade > b.Prioridade) ? 1 : -1)
-                });
-                        aux = listItems(aux, 1, 5); 
+                return ((a.Prioridade > b.Prioridade) ? 1 : -1)
+            });
+            aux = listItems(aux, 1, 5);
 
             for (var i = 0 in aux) {
 
-                
+
                 // console.log(aux);
                 document.getElementById("dados").innerHTML += "<br><b>TicketId: </b>" + aux[i].TicketID + "<br><b>Nome do Cliente: </b>" + aux[i].CustomerName + "<br><b>Data de criação: </b>" + aux[i].DateCreate + "<br><b>Data de Update: </b>" + aux[i].DateUpdate + "<br><b>Prioridade: </b>" + aux[i].Prioridade + "<br> <b>Interações: </b><br>";
                 for (var j = 0 in aux[i].Interactions) {
                     document.getElementById("dados").innerHTML += "<div class='interacao'><b>Assunto:</b> " + aux[i].Interactions[j].Subject + "<br><b>Mensagem:</b> " + aux[i].Interactions[j].Message + "<br><b>Data de Criação: </b>" + aux[i].Interactions[j].DateCreate + "<br><b>Sender:</b> " + aux[i].Interactions[j].Sender + "<br></div>";
                 }
                 document.getElementById("dados").innerHTML += "<br>";
-              
+
             }
         }
 
@@ -157,9 +159,9 @@
 
                 }
             }
-            }
+        }
 
-        
+
 
         function filtrarPrioridadeNormal() {
             document.getElementById("dados").innerHTML = "";
@@ -246,6 +248,7 @@
 
             }
         }
+
     </script>
 
 </body>
